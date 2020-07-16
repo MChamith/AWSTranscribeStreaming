@@ -45,18 +45,23 @@ int main()
         request.SetEventStreamHandler(handler);
 
         auto OnStreamReady = [](AudioStream& stream) {
+            printf("stream getting ready");
             CaptureAudio(stream);
+            printf("audio captured");
             stream.flush();
             stream.Close();
         };
 
         Aws::Utils::Threading::Semaphore signaling(0 /*initialCount*/, 1 /*maxCount*/);
-        auto OnResponseCallback = [&signaling](const TranscribeStreamingServiceClient*,
+        auto OnResponseCallback = [&signaling](
+                
+            const TranscribeStreamingServiceClient*,
                   const Model::StartStreamTranscriptionRequest&,
                   const Model::StartStreamTranscriptionOutcome&,
-                  const std::shared_ptr<const Aws::Client::AsyncCallerContext>&) { signaling.Release(); };
+                  const std::shared_ptr<const Aws::Client::AsyncCallerContext>&) {  printf("signalling releasing");signaling.Release(); };
 
         client.StartStreamTranscriptionAsync(request, OnStreamReady, OnResponseCallback, nullptr /*context*/);
+        printf("stream getting ready");
         signaling.WaitOne(); // prevent the application from exiting until we're done
     }
 

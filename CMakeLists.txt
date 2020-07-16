@@ -4,7 +4,6 @@ set(CMAKE_CXX_STANDARD 11)
 project(demo LANGUAGES CXX)
 
 find_package(AWSSDK COMPONENTS transcribestreaming)
-find_package(kaldi-targets REQUIRED)
 
 add_executable(${PROJECT_NAME} "main.cpp" "audio-capture.cpp")
 
@@ -18,4 +17,4 @@ if(MSVC)
 else()
     target_compile_options(${PROJECT_NAME} PRIVATE "-Wall" "-Wextra" "-Werror")
     target_link_libraries(${PROJECT_NAME} PRIVATE portaudio)
-endif() 
+endif()
